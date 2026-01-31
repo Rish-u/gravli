@@ -280,19 +280,44 @@ export default function StudentScreen() {
 
   const activeInProgressOrder = myOrders.find((o) => o.status === 'in-progress');
 
+  const getCafeIcon = (iconName: string | undefined): any => {
+    const iconMap: { [key: string]: any } = {
+      'cafe': 'cafe',
+      'restaurant': 'restaurant',
+      'ice-cream': 'ice-cream',
+      'wine': 'wine',
+      'nutrition': 'nutrition',
+      'print': 'print',
+    };
+    return iconMap[iconName || 'restaurant'] || 'restaurant';
+  };
+
   const renderCafeGrid = () => {
     return (
       <View style={styles.cafeGrid}>
         {Object.entries(CAFE_DATA).map(([cafeId, cafe]) => (
           <TouchableOpacity
             key={cafeId}
-            style={styles.cafeBox}
+            style={[
+              styles.cafeBox,
+              cafe.type === 'stationery' && styles.stationeryBox
+            ]}
             onPress={() => openMenu(cafeId)}
           >
-            <View style={styles.cafeImage}>
-              <Ionicons name="restaurant" size={40} color="#8b5cf6" />
+            <View style={[
+              styles.cafeImage,
+              cafe.type === 'stationery' && styles.stationeryImage
+            ]}>
+              <Ionicons 
+                name={getCafeIcon(cafe.icon)} 
+                size={40} 
+                color={cafe.type === 'stationery' ? '#f59e0b' : '#8b5cf6'} 
+              />
             </View>
             <Text style={styles.cafeName}>{cafe.name}</Text>
+            {cafe.type === 'stationery' && (
+              <Text style={styles.cafeTag}>Printing Services</Text>
+            )}
           </TouchableOpacity>
         ))}
       </View>
