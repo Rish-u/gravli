@@ -59,7 +59,25 @@ export default function LoginScreen() {
       setSigningIn(true);
       
       if (Platform.OS === 'web') {
-        await signInWithPopup(auth, googleProvider);
+        // Import redirect method for better compatibility
+        const { signInWithRedirect, getRedirectResult } = await import('firebase/auth');
+        
+        // Try popup first, fall back to redirect
+        try {
+          await signInWithPopup(auth, googleProvider);
+        } catch (popupError: any) {
+          console.log('Popup blocked, trying redirect...', popupError.code);
+          
+          // If popup is blocked or fails, try redirect
+          if (popupError.code === 'auth/popup-blocked' || 
+              popupError.code === 'auth/popup-closed-by-user' ||
+              popupError.code === 'auth/cancelled-popup-request' ||
+              popupError.message?.includes('Cross-Origin')) {
+            await signInWithRedirect(auth, googleProvider);
+          } else {
+            throw popupError;
+          }
+        }
       } else {
         Alert.alert(
           'Mobile Sign In',
@@ -78,6 +96,14 @@ export default function LoginScreen() {
           [
             { text: 'Cancel', style: 'cancel' },
             { text: 'Use Email Login', onPress: () => setShowEmailLogin(true) }
+          ]
+        );
+      } else if (error.code === 'auth/operation-not-supported-in-this-environment') {
+        Alert.alert(
+          'Use Email Instead',
+          'Google Sign-in is not available in this environment. Please use Email login.',
+          [
+            { text: 'OK', onPress: () => setShowEmailLogin(true) }
           ]
         );
       } else {
