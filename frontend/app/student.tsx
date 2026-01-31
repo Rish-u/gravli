@@ -49,6 +49,7 @@ export default function StudentScreen() {
   const [allOrders, setAllOrders] = useState<DeliveryRequest[]>([]);
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [orderType, setOrderType] = useState<'delivery' | 'pickup'>('delivery');
 
   const user = auth.currentUser;
 
