@@ -586,55 +586,143 @@ export default function StudentScreen() {
             </View>
 
             <ScrollView style={styles.checkoutForm}>
-              <Text style={styles.formLabel}>Drop-off Location</Text>
-
-              <View style={styles.locationRow}>
-                <View style={styles.locationInput}>
-                  <Text style={styles.inputLabel}>Block</Text>
-                  <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    style={styles.blockScroll}
-                  >
-                    {BLOCKS.map((block) => (
-                      <TouchableOpacity
-                        key={block}
-                        style={[
-                          styles.blockOption,
-                          selectedBlock === block && styles.blockOptionSelected,
-                        ]}
-                        onPress={() => setSelectedBlock(block)}
-                      >
-                        <Text
-                          style={[
-                            styles.blockOptionText,
-                            selectedBlock === block && styles.blockOptionTextSelected,
-                          ]}
-                        >
-                          {block}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
-                  </ScrollView>
-                </View>
-
-                <View style={styles.roomInputContainer}>
-                  <Text style={styles.inputLabel}>Room</Text>
-                  <TextInput
-                    style={styles.roomInput}
-                    placeholder="e.g., 102"
-                    placeholderTextColor="#94a3b8"
-                    value={roomNumber}
-                    onChangeText={setRoomNumber}
-                    keyboardType="number-pad"
-                    maxLength={3}
+              {/* Order Type Toggle */}
+              <Text style={styles.formLabel}>How would you like to receive your order?</Text>
+              <View style={styles.orderTypeContainer}>
+                <TouchableOpacity
+                  style={[
+                    styles.orderTypeOption,
+                    orderType === 'delivery' && styles.orderTypeSelected,
+                  ]}
+                  onPress={() => setOrderType('delivery')}
+                >
+                  <Ionicons 
+                    name="bicycle" 
+                    size={24} 
+                    color={orderType === 'delivery' ? '#fff' : '#94a3b8'} 
                   />
-                </View>
+                  <Text style={[
+                    styles.orderTypeText,
+                    orderType === 'delivery' && styles.orderTypeTextSelected,
+                  ]}>
+                    Delivery
+                  </Text>
+                  <Text style={[
+                    styles.orderTypeFee,
+                    orderType === 'delivery' && styles.orderTypeFeeSelected,
+                  ]}>
+                    +₹{DELIVERY_FEE}
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[
+                    styles.orderTypeOption,
+                    orderType === 'pickup' && styles.orderTypeSelectedPickup,
+                  ]}
+                  onPress={() => setOrderType('pickup')}
+                >
+                  <Ionicons 
+                    name="walk" 
+                    size={24} 
+                    color={orderType === 'pickup' ? '#fff' : '#94a3b8'} 
+                  />
+                  <Text style={[
+                    styles.orderTypeText,
+                    orderType === 'pickup' && styles.orderTypeTextSelected,
+                  ]}>
+                    Self Pickup
+                  </Text>
+                  <Text style={[
+                    styles.orderTypeFee,
+                    orderType === 'pickup' && styles.orderTypeFeeSelected,
+                  ]}>
+                    FREE
+                  </Text>
+                </TouchableOpacity>
               </View>
 
+              {/* Location input only for delivery */}
+              {orderType === 'delivery' && (
+                <>
+                  <Text style={styles.formLabel}>Drop-off Location</Text>
+                  <View style={styles.locationRow}>
+                    <View style={styles.locationInput}>
+                      <Text style={styles.inputLabel}>Block</Text>
+                      <ScrollView
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        style={styles.blockScroll}
+                      >
+                        {BLOCKS.map((block) => (
+                          <TouchableOpacity
+                            key={block}
+                            style={[
+                              styles.blockOption,
+                              selectedBlock === block && styles.blockOptionSelected,
+                            ]}
+                            onPress={() => setSelectedBlock(block)}
+                          >
+                            <Text
+                              style={[
+                                styles.blockOptionText,
+                                selectedBlock === block && styles.blockOptionTextSelected,
+                              ]}
+                            >
+                              {block}
+                            </Text>
+                          </TouchableOpacity>
+                        ))}
+                      </ScrollView>
+                    </View>
+
+                    <View style={styles.roomInputContainer}>
+                      <Text style={styles.inputLabel}>Room</Text>
+                      <TextInput
+                        style={styles.roomInput}
+                        placeholder="e.g., 102"
+                        placeholderTextColor="#94a3b8"
+                        value={roomNumber}
+                        onChangeText={setRoomNumber}
+                        keyboardType="number-pad"
+                        maxLength={3}
+                      />
+                    </View>
+                  </View>
+                </>
+              )}
+
+              {/* Pickup info message */}
+              {orderType === 'pickup' && (
+                <View style={styles.pickupInfo}>
+                  <Ionicons name="information-circle" size={24} color="#22c55e" />
+                  <Text style={styles.pickupInfoText}>
+                    You'll receive a 4-digit PIN. Show it at the cafe to collect your order.
+                  </Text>
+                </View>
+              )}
+
               <View style={styles.totalSection}>
-                <Text style={styles.totalLabel}>Total Amount (Item + Fee)</Text>
-                <Text style={styles.totalAmount}>₹{(cartTotal + DELIVERY_FEE).toFixed(2)}</Text>
+                <View style={styles.totalRow}>
+                  <Text style={styles.totalSubLabel}>Item Total</Text>
+                  <Text style={styles.totalSubValue}>₹{cartTotal.toFixed(2)}</Text>
+                </View>
+                <View style={styles.totalRow}>
+                  <Text style={styles.totalSubLabel}>
+                    {orderType === 'delivery' ? 'Delivery Fee' : 'Pickup Fee'}
+                  </Text>
+                  <Text style={[
+                    styles.totalSubValue,
+                    orderType === 'pickup' && styles.freeText
+                  ]}>
+                    {orderType === 'delivery' ? `₹${DELIVERY_FEE.toFixed(2)}` : 'FREE'}
+                  </Text>
+                </View>
+                <View style={styles.totalDivider} />
+                <Text style={styles.totalLabel}>Total Amount</Text>
+                <Text style={styles.totalAmount}>
+                  ₹{(cartTotal + (orderType === 'delivery' ? DELIVERY_FEE : PICKUP_FEE)).toFixed(2)}
+                </Text>
               </View>
 
               <View style={styles.checkoutActions}>
