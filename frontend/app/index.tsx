@@ -145,46 +145,151 @@ export default function LoginScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView 
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
       <StatusBar style="light" />
       
-      <View style={styles.content}>
-        <View style={styles.logoContainer}>
-          <View style={styles.logoCircle}>
-            <Ionicons name="fast-food" size={60} color="#8b5cf6" />
+      <ScrollView 
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.content}>
+          <View style={styles.logoContainer}>
+            <View style={styles.logoCircle}>
+              <Ionicons name="fast-food" size={60} color="#8b5cf6" />
+            </View>
+            <Text style={styles.title}>Gravli</Text>
+            <Text style={styles.subtitle}>Campus Delivery</Text>
           </View>
-          <Text style={styles.title}>Gravli</Text>
-          <Text style={styles.subtitle}>Campus Delivery</Text>
-        </View>
 
-        <View style={styles.welcomeSection}>
-          <Text style={styles.welcomeTitle}>Welcome to Gravli!</Text>
-          <Text style={styles.welcomeText}>
-            Your on-campus delivery solution. Fast, easy, and by students, for students.
-          </Text>
-        </View>
+          <View style={styles.welcomeSection}>
+            <Text style={styles.welcomeTitle}>Welcome to Gravli!</Text>
+            <Text style={styles.welcomeText}>
+              Your on-campus delivery solution. Fast, easy, and by students, for students.
+            </Text>
+          </View>
 
-        <TouchableOpacity
-          style={[styles.googleButton, signingIn && styles.buttonDisabled]}
-          onPress={handleGoogleSignIn}
-          disabled={signingIn}
-        >
-          {signingIn ? (
-            <ActivityIndicator color="#fff" />
-          ) : (
+          {!showEmailLogin ? (
             <>
-              <Ionicons name="logo-google" size={24} color="#fff" />
-              <Text style={styles.googleButtonText}>Sign in with Google</Text>
-            </>
-          )}
-        </TouchableOpacity>
-      </View>
+              <TouchableOpacity
+                style={[styles.googleButton, signingIn && styles.buttonDisabled]}
+                onPress={handleGoogleSignIn}
+                disabled={signingIn}
+              >
+                {signingIn ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <>
+                    <Ionicons name="logo-google" size={24} color="#fff" />
+                    <Text style={styles.googleButtonText}>Sign in with Google</Text>
+                  </>
+                )}
+              </TouchableOpacity>
 
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>Made By Students</Text>
-        <Text style={styles.footerText}>Made For Students</Text>
-      </View>
-    </View>
+              <View style={styles.divider}>
+                <View style={styles.dividerLine} />
+                <Text style={styles.dividerText}>OR</Text>
+                <View style={styles.dividerLine} />
+              </View>
+
+              <TouchableOpacity
+                style={styles.emailButton}
+                onPress={() => setShowEmailLogin(true)}
+              >
+                <Ionicons name="mail" size={24} color="#8b5cf6" />
+                <Text style={styles.emailButtonText}>Continue with Email</Text>
+              </TouchableOpacity>
+            </>
+          ) : (
+            <View style={styles.emailForm}>
+              {isSignUp && (
+                <View style={styles.inputContainer}>
+                  <Ionicons name="person-outline" size={20} color="#94a3b8" style={styles.inputIcon} />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Full Name"
+                    placeholderTextColor="#94a3b8"
+                    value={name}
+                    onChangeText={setName}
+                    autoCapitalize="words"
+                  />
+                </View>
+              )}
+
+              <View style={styles.inputContainer}>
+                <Ionicons name="mail-outline" size={20} color="#94a3b8" style={styles.inputIcon} />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Email"
+                  placeholderTextColor="#94a3b8"
+                  value={email}
+                  onChangeText={setEmail}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                />
+              </View>
+
+              <View style={styles.inputContainer}>
+                <Ionicons name="lock-closed-outline" size={20} color="#94a3b8" style={styles.inputIcon} />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Password (min 6 characters)"
+                  placeholderTextColor="#94a3b8"
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry
+                  autoCapitalize="none"
+                />
+              </View>
+
+              <TouchableOpacity
+                style={[styles.submitButton, signingIn && styles.buttonDisabled]}
+                onPress={handleEmailAuth}
+                disabled={signingIn}
+              >
+                {signingIn ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <Text style={styles.submitButtonText}>
+                    {isSignUp ? 'Create Account' : 'Sign In'}
+                  </Text>
+                )}
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.switchModeButton}
+                onPress={() => setIsSignUp(!isSignUp)}
+              >
+                <Text style={styles.switchModeText}>
+                  {isSignUp ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.backButton}
+                onPress={() => {
+                  setShowEmailLogin(false);
+                  setEmail('');
+                  setPassword('');
+                  setName('');
+                }}
+              >
+                <Ionicons name="arrow-back" size={20} color="#8b5cf6" />
+                <Text style={styles.backButtonText}>Back to options</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </View>
+
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>Made By Students</Text>
+          <Text style={styles.footerText}>Made For Students</Text>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
