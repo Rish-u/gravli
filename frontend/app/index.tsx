@@ -298,6 +298,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#0f172a',
   },
+  scrollContent: {
+    flexGrow: 1,
+  },
   loadingContainer: {
     flex: 1,
     backgroundColor: '#0f172a',
@@ -314,6 +317,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 24,
+    paddingVertical: 40,
   },
   logoContainer: {
     alignItems: 'center',
@@ -373,6 +377,100 @@ const styles = StyleSheet.create({
   googleButtonText: {
     color: '#fff',
     fontSize: 18,
+    fontWeight: '600',
+  },
+  divider: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    maxWidth: 400,
+    marginVertical: 24,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: '#334155',
+  },
+  dividerText: {
+    color: '#94a3b8',
+    paddingHorizontal: 16,
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  emailButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#1e293b',
+    borderWidth: 2,
+    borderColor: '#8b5cf6',
+    paddingVertical: 16,
+    paddingHorizontal: 32,
+    borderRadius: 12,
+    width: '100%',
+    maxWidth: 400,
+    gap: 12,
+  },
+  emailButtonText: {
+    color: '#8b5cf6',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  emailForm: {
+    width: '100%',
+    maxWidth: 400,
+    gap: 16,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#1e293b',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#334155',
+    paddingHorizontal: 16,
+  },
+  inputIcon: {
+    marginRight: 12,
+  },
+  input: {
+    flex: 1,
+    color: '#fff',
+    fontSize: 16,
+    paddingVertical: 16,
+  },
+  submitButton: {
+    backgroundColor: '#8b5cf6',
+    paddingVertical: 16,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  submitButtonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '700',
+  },
+  switchModeButton: {
+    alignItems: 'center',
+    paddingVertical: 12,
+  },
+  switchModeText: {
+    color: '#8b5cf6',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  backButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    paddingVertical: 12,
+    marginTop: 8,
+  },
+  backButtonText: {
+    color: '#8b5cf6',
+    fontSize: 14,
     fontWeight: '600',
   },
   footer: {
