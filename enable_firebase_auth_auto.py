@@ -150,7 +150,7 @@ def main():
         print("   5. Click Save")
         
         print("\n🚀 Your app is ready to test!")
-        print("   URL: https://gravli-android.preview.emergentagent.com")
+        print("   URL: https://gravli-v2-mobile.preview.emergentagent.com")
         print("\n   Try:")
         print("   ✅ Demo Mode (green button) - Already working!")
         print("   ✅ Email Sign-up/Sign-in - NOW WORKING!")

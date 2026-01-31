@@ -69,7 +69,7 @@ Current Firestore security rules allow authenticated users to:
 
 ## 📱 Testing the App
 
-1. **Open preview**: https://gravli-android.preview.emergentagent.com
+1. **Open preview**: https://gravli-v2-mobile.preview.emergentagent.com
 2. **Click "Continue with Email"**
 3. **Sign Up**:
    - Enter your name

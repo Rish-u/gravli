@@ -51,7 +51,7 @@
 
 ### 3.1 Check Email/Password
 After enabling, try this:
-1. Go to: https://gravli-android.preview.emergentagent.com
+1. Go to: https://gravli-v2-mobile.preview.emergentagent.com
 2. Click **"Continue with Email"**
 3. Click **"Don't have an account? Sign Up"**
 4. Enter:
@@ -63,7 +63,7 @@ After enabling, try this:
 
 ### 3.2 Check Google Sign-in
 After adding domain:
-1. Go to: https://gravli-android.preview.emergentagent.com
+1. Go to: https://gravli-v2-mobile.preview.emergentagent.com
 2. Click **"Sign in with Google"**
 3. Should see Google account picker popup
 4. Select your Google account
@@ -262,5 +262,5 @@ After completing all steps, **all three authentication methods** will work perfe
 
 **Project**: Gravli Campus Delivery  
 **Firebase Project**: gravli2466  
-**Preview URL**: https://gravli-android.preview.emergentagent.com  
+**Preview URL**: https://gravli-v2-mobile.preview.emergentagent.com  
 **Last Updated**: January 2025

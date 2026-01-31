@@ -86,7 +86,7 @@ You should see your preview domain in the list now
 
 Now go test your app at:
 ```
-https://gravli-android.preview.emergentagent.com
+https://gravli-v2-mobile.preview.emergentagent.com
 ```
 
 All three methods will work:
@@ -181,7 +181,7 @@ All three methods will work:
 
 3. **Your App:**
    ```
-   https://gravli-android.preview.emergentagent.com
+   https://gravli-v2-mobile.preview.emergentagent.com
    ```
 
 ---

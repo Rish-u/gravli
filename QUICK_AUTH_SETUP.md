@@ -103,7 +103,7 @@ You should see **3 domains** in the list:
 
 ### Test 1: Email/Password Sign-up
 
-1. Open: https://gravli-android.preview.emergentagent.com
+1. Open: https://gravli-v2-mobile.preview.emergentagent.com
 2. Click: **"Continue with Email"**
 3. Click: **"Don't have an account? Sign Up"**
 4. Fill in:
@@ -115,7 +115,7 @@ You should see **3 domains** in the list:
 
 ### Test 2: Google Sign-in
 
-1. Go back to: https://gravli-android.preview.emergentagent.com
+1. Go back to: https://gravli-v2-mobile.preview.emergentagent.com
 2. (If you just signed up, logout first)
 3. Click: **"Sign in with Google"**
 4. **Expected**: Google account picker popup
@@ -124,7 +124,7 @@ You should see **3 domains** in the list:
 
 ### Test 3: Demo Mode (Already Works)
 
-1. Go to: https://gravli-android.preview.emergentagent.com
+1. Go to: https://gravli-v2-mobile.preview.emergentagent.com
 2. Click: **"Try Demo Mode (No Setup Required)"**
 3. Click: **"Start Demo"**
 4. **Expected**: Works immediately (already functional)
@@ -185,7 +185,7 @@ You should see **3 domains** in the list:
 - **Direct to Authentication**: https://console.firebase.google.com/u/0/project/gravli2466/authentication
 
 ### Your App URLs:
-- **Preview**: https://gravli-android.preview.emergentagent.com
+- **Preview**: https://gravli-v2-mobile.preview.emergentagent.com
 - **Test Account**: teststudent@gravli.app / test123
 
 ### Key Settings:
@@ -221,4 +221,4 @@ If something doesn't work:
 
 **That's it!** Your authentication is now fully configured. All three sign-in methods will work perfectly! 🎉
 
-**Ready to test**: https://gravli-android.preview.emergentagent.com
+**Ready to test**: https://gravli-v2-mobile.preview.emergentagent.com
