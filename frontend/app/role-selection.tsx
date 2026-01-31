@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -9,9 +9,32 @@ import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
+import { auth } from '../config/firebase';
 
 export default function RoleSelectionScreen() {
   const router = useRouter();
+  const [userName, setUserName] = useState('User');
+
+  useEffect(() => {
+    loadUserName();
+  }, []);
+
+  const loadUserName = async () => {
+    try {
+      const isDemoMode = await AsyncStorage.getItem('isDemoMode');
+      if (isDemoMode === 'true') {
+        const demoUserStr = await AsyncStorage.getItem('demoUser');
+        if (demoUserStr) {
+          const demoUser = JSON.parse(demoUserStr);
+          setUserName(demoUser.displayName || 'Demo User');
+        }
+      } else if (auth.currentUser) {
+        setUserName(auth.currentUser.displayName || 'User');
+      }
+    } catch (error) {
+      console.error('Error loading user name:', error);
+    }
+  };
 
   const selectRole = async (role: 'student' | 'deliverer') => {
     await AsyncStorage.setItem('userRole', role);
@@ -23,6 +46,7 @@ export default function RoleSelectionScreen() {
       <StatusBar style="light" />
       
       <View style={styles.content}>
+        <Text style={styles.greeting}>Hello, {userName}!</Text>
         <Text style={styles.title}>What would you like to do?</Text>
         <Text style={styles.subtitle}>Choose your role for this session</Text>
 
