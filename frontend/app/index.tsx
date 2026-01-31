@@ -213,6 +213,21 @@ export default function LoginScreen() {
           {!showEmailLogin ? (
             <>
               <TouchableOpacity
+                style={[styles.demoButton, signingIn && styles.buttonDisabled]}
+                onPress={() => setShowDemoMode(true)}
+                disabled={signingIn}
+              >
+                <Ionicons name="flash" size={24} color="#fff" />
+                <Text style={styles.demoButtonText}>Try Demo Mode (No Setup Required)</Text>
+              </TouchableOpacity>
+
+              <View style={styles.divider}>
+                <View style={styles.dividerLine} />
+                <Text style={styles.dividerText}>OR</Text>
+                <View style={styles.dividerLine} />
+              </View>
+
+              <TouchableOpacity
                 style={[styles.googleButton, signingIn && styles.buttonDisabled]}
                 onPress={handleGoogleSignIn}
                 disabled={signingIn}
@@ -227,12 +242,6 @@ export default function LoginScreen() {
                 )}
               </TouchableOpacity>
 
-              <View style={styles.divider}>
-                <View style={styles.dividerLine} />
-                <Text style={styles.dividerText}>OR</Text>
-                <View style={styles.dividerLine} />
-              </View>
-
               <TouchableOpacity
                 style={styles.emailButton}
                 onPress={() => setShowEmailLogin(true)}
@@ -241,6 +250,51 @@ export default function LoginScreen() {
                 <Text style={styles.emailButtonText}>Continue with Email</Text>
               </TouchableOpacity>
             </>
+          ) : showDemoMode ? (
+            <View style={styles.emailForm}>
+              <View style={styles.demoInfo}>
+                <Ionicons name="information-circle" size={48} color="#8b5cf6" />
+                <Text style={styles.demoInfoTitle}>Demo Mode</Text>
+                <Text style={styles.demoInfoText}>
+                  Test the app instantly without any authentication setup. All features work except data won't persist between sessions.
+                </Text>
+              </View>
+
+              <View style={styles.inputContainer}>
+                <Ionicons name="person-outline" size={20} color="#94a3b8" style={styles.inputIcon} />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Your Name (optional)"
+                  placeholderTextColor="#94a3b8"
+                  value={name}
+                  onChangeText={setName}
+                  autoCapitalize="words"
+                />
+              </View>
+
+              <TouchableOpacity
+                style={[styles.submitButton, signingIn && styles.buttonDisabled]}
+                onPress={handleDemoMode}
+                disabled={signingIn}
+              >
+                {signingIn ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <Text style={styles.submitButtonText}>Start Demo</Text>
+                )}
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.backButton}
+                onPress={() => {
+                  setShowDemoMode(false);
+                  setName('');
+                }}
+              >
+                <Ionicons name="arrow-back" size={20} color="#8b5cf6" />
+                <Text style={styles.backButtonText}>Back to options</Text>
+              </TouchableOpacity>
+            </View>
           ) : (
             <View style={styles.emailForm}>
               {isSignUp && (
