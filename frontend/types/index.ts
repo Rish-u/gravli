@@ -19,7 +19,7 @@ export interface DeliveryRequest {
   dropoffLocation: string;
   deliveryFee: number;
   totalAmount: number;
-  status: 'open' | 'in-progress' | 'completed';
+  status: 'open' | 'in-progress' | 'completed' | 'rejected' | 'ready';
   requesterId: string;
   requesterName: string;
   requesterPhotoURL?: string;
@@ -29,4 +29,10 @@ export interface DeliveryRequest {
   createdAt: any;
   subStatus: 'reached-cafe' | 'picked-up' | null;
   estimatedTime: string | null;
+  // New fields for owner management
+  ownerStatus?: 'ready' | 'rejected' | null;
+  pin?: string; // 4-digit PIN for secure handoff
+  orderType?: 'delivery' | 'pickup'; // Delivery vs Self Pickup
 }
+
+export type UserRole = 'student' | 'deliverer' | 'owner';

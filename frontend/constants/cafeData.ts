@@ -7,6 +7,8 @@ export interface MenuItem {
 export interface CafeData {
   name: string;
   items: MenuItem[];
+  icon?: string;
+  type?: 'food' | 'stationery';
 }
 
 const CORNER_CAFE_MENU: MenuItem[] = [
@@ -84,31 +86,113 @@ const CORNER_CAFE_MENU: MenuItem[] = [
   { id: "cc-72", name: "Brownie", price: 90 }
 ];
 
-function generateMenuItems(cafeId: string, count: number = 15): MenuItem[] {
-  const items: MenuItem[] = [];
-  for (let i = 1; i <= count; i++) {
-    items.push({
-      id: `${cafeId.toLowerCase()}-${i}`,
-      name: `Item ${i}`,
-      price: 100 + (i * 5)
-    });
-  }
-  return items;
-}
+const HR_CAFE_MENU: MenuItem[] = [
+  { id: "hr-1", name: "Masala Dosa", price: 60 },
+  { id: "hr-2", name: "Plain Dosa", price: 50 },
+  { id: "hr-3", name: "Rava Dosa", price: 70 },
+  { id: "hr-4", name: "Onion Uttapam", price: 65 },
+  { id: "hr-5", name: "Idli Sambar (2 pcs)", price: 40 },
+  { id: "hr-6", name: "Medu Vada (2 pcs)", price: 50 },
+  { id: "hr-7", name: "Filter Coffee", price: 30 },
+  { id: "hr-8", name: "South Indian Thali", price: 120 },
+  { id: "hr-9", name: "Curd Rice", price: 60 },
+  { id: "hr-10", name: "Lemon Rice", price: 70 },
+  { id: "hr-11", name: "Upma", price: 45 },
+  { id: "hr-12", name: "Pongal", price: 55 },
+  { id: "hr-13", name: "Mysore Pak", price: 40 },
+  { id: "hr-14", name: "Gulab Jamun (2 pcs)", price: 50 },
+  { id: "hr-15", name: "Kesari Bath", price: 45 },
+];
+
+const THICK_LETTO_MENU: MenuItem[] = [
+  { id: "tl-1", name: "Thick Shake - Chocolate", price: 120 },
+  { id: "tl-2", name: "Thick Shake - Vanilla", price: 110 },
+  { id: "tl-3", name: "Thick Shake - Strawberry", price: 120 },
+  { id: "tl-4", name: "Thick Shake - Oreo", price: 140 },
+  { id: "tl-5", name: "Thick Shake - KitKat", price: 150 },
+  { id: "tl-6", name: "Cold Coffee", price: 90 },
+  { id: "tl-7", name: "Iced Latte", price: 110 },
+  { id: "tl-8", name: "Frappe - Caramel", price: 130 },
+  { id: "tl-9", name: "Frappe - Mocha", price: 130 },
+  { id: "tl-10", name: "Hot Chocolate", price: 80 },
+  { id: "tl-11", name: "Brownie Shake", price: 160 },
+  { id: "tl-12", name: "Mango Smoothie", price: 100 },
+  { id: "tl-13", name: "Blueberry Smoothie", price: 110 },
+  { id: "tl-14", name: "Ice Cream Sundae", price: 90 },
+  { id: "tl-15", name: "Waffle with Ice Cream", price: 150 },
+];
+
+const JUICE_BAR_MENU: MenuItem[] = [
+  { id: "jb-1", name: "Fresh Orange Juice", price: 60 },
+  { id: "jb-2", name: "Watermelon Juice", price: 50 },
+  { id: "jb-3", name: "Pineapple Juice", price: 55 },
+  { id: "jb-4", name: "Mixed Fruit Juice", price: 70 },
+  { id: "jb-5", name: "Apple Juice", price: 65 },
+  { id: "jb-6", name: "Pomegranate Juice", price: 80 },
+  { id: "jb-7", name: "Mango Juice", price: 60 },
+  { id: "jb-8", name: "Sugarcane Juice", price: 40 },
+  { id: "jb-9", name: "Lemon Soda", price: 35 },
+  { id: "jb-10", name: "Virgin Mojito", price: 70 },
+  { id: "jb-11", name: "Blue Lagoon", price: 75 },
+  { id: "jb-12", name: "Green Detox Juice", price: 90 },
+  { id: "jb-13", name: "Carrot Ginger Juice", price: 65 },
+  { id: "jb-14", name: "Banana Shake", price: 70 },
+  { id: "jb-15", name: "Coconut Water", price: 50 },
+];
+
+const TIBET_KITCHEN_MENU: MenuItem[] = [
+  { id: "tk-1", name: "Veg Momos (8 pcs)", price: 80 },
+  { id: "tk-2", name: "Chicken Momos (8 pcs)", price: 100 },
+  { id: "tk-3", name: "Steamed Momos", price: 70 },
+  { id: "tk-4", name: "Fried Momos", price: 90 },
+  { id: "tk-5", name: "Tandoori Momos", price: 120 },
+  { id: "tk-6", name: "Gravy Momos", price: 110 },
+  { id: "tk-7", name: "Thukpa (Veg)", price: 100 },
+  { id: "tk-8", name: "Thukpa (Chicken)", price: 130 },
+  { id: "tk-9", name: "Tibetan Bread", price: 40 },
+  { id: "tk-10", name: "Butter Tea", price: 50 },
+  { id: "tk-11", name: "Chowmein (Veg)", price: 80 },
+  { id: "tk-12", name: "Chowmein (Chicken)", price: 100 },
+  { id: "tk-13", name: "Spring Roll (4 pcs)", price: 70 },
+  { id: "tk-14", name: "Momo Platter", price: 200 },
+  { id: "tk-15", name: "Special Thali", price: 180 },
+];
+
+const STATIONERY_MENU: MenuItem[] = [
+  { id: "st-1", name: "B&W Print (per page)", price: 2 },
+  { id: "st-2", name: "Color Print (per page)", price: 10 },
+  { id: "st-3", name: "Spiral Binding", price: 30 },
+  { id: "st-4", name: "Lamination (A4)", price: 20 },
+  { id: "st-5", name: "Photocopy B&W (per page)", price: 1 },
+  { id: "st-6", name: "Photocopy Color (per page)", price: 5 },
+  { id: "st-7", name: "A4 Paper (10 sheets)", price: 10 },
+  { id: "st-8", name: "Pen", price: 10 },
+  { id: "st-9", name: "Pencil", price: 5 },
+  { id: "st-10", name: "Eraser", price: 5 },
+  { id: "st-11", name: "Ruler", price: 15 },
+  { id: "st-12", name: "Notebook (100 pages)", price: 50 },
+  { id: "st-13", name: "File Folder", price: 25 },
+  { id: "st-14", name: "Stapler", price: 60 },
+  { id: "st-15", name: "Highlighter", price: 20 },
+];
 
 export const CAFE_DATA: { [key: string]: CafeData } = {
-  "HR1": { name: "Corner Cafe", items: CORNER_CAFE_MENU },
-  "HR2": { name: "HR Cafe", items: generateMenuItems("HR2", 15) },
-  "HR3": { name: "HR3", items: generateMenuItems("HR3", 15) },
-  "HR4": { name: "HR4", items: generateMenuItems("HR4", 15) },
-  "HR5": { name: "HR5", items: generateMenuItems("HR5", 15) },
-  "HR6": { name: "HR6", items: generateMenuItems("HR6", 15) },
-  "HR7": { name: "HR7", items: generateMenuItems("HR7", 15) },
-  "HR8": { name: "HR8", items: generateMenuItems("HR8", 15) },
-  "HR9": { name: "HR9", items: generateMenuItems("HR9", 15) },
-  "HR10": { name: "HR10", items: generateMenuItems("HR10", 15) },
-  "HR11": { name: "HR11", items: generateMenuItems("HR11", 15) },
-  "HR12": { name: "HR12", items: generateMenuItems("HR12", 15) },
+  "HR1": { name: "Corner Cafe", items: CORNER_CAFE_MENU, icon: "cafe", type: 'food' },
+  "HR2": { name: "HR Cafe", items: HR_CAFE_MENU, icon: "restaurant", type: 'food' },
+  "TL": { name: "Thick Letto", items: THICK_LETTO_MENU, icon: "ice-cream", type: 'food' },
+  "JB": { name: "Juice Bar", items: JUICE_BAR_MENU, icon: "wine", type: 'food' },
+  "TK": { name: "Tibet Kitchen", items: TIBET_KITCHEN_MENU, icon: "nutrition", type: 'food' },
+  "ST": { name: "Campus Stationery", items: STATIONERY_MENU, icon: "print", type: 'stationery' },
+};
+
+// Owner IDs mapped to their cafe
+export const OWNER_IDS: { [key: string]: string } = {
+  "OWNER001": "HR1",
+  "OWNER002": "HR2",
+  "OWNER003": "TL",
+  "OWNER004": "JB",
+  "OWNER005": "TK",
+  "OWNER006": "ST",
 };
 
 export const BLOCKS = [
@@ -116,3 +200,9 @@ export const BLOCKS = [
 ];
 
 export const DELIVERY_FEE = 50;
+export const PICKUP_FEE = 0; // Self pickup is free
+
+// Generate 4-digit PIN for orders
+export const generateOrderPin = (): string => {
+  return Math.floor(1000 + Math.random() * 9000).toString();
+};
