@@ -211,7 +211,7 @@ export default function LoginScreen() {
             </Text>
           </View>
 
-          {!showEmailLogin ? (
+          {!showEmailLogin && !showDemoMode ? (
             <>
               <TouchableOpacity
                 style={[styles.demoButton, signingIn && styles.buttonDisabled]}
