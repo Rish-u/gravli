@@ -1,16 +1,117 @@
-import { Text, View, StyleSheet, Image } from "react-native";
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+  Image,
+  Alert,
+  Platform,
+} from 'react-native';
+import { useRouter } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import { auth, googleProvider } from '../config/firebase';
+import { onAuthStateChanged, signInWithPopup, signInWithCredential, GoogleAuthProvider } from 'firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Ionicons } from '@expo/vector-icons';
+import * as WebBrowser from 'expo-web-browser';
 
-const EXPO_PUBLIC_BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
+WebBrowser.maybeCompleteAuthSession();
 
-export default function Index() {
-  console.log(EXPO_PUBLIC_BACKEND_URL, "EXPO_PUBLIC_BACKEND_URL");
+export default function LoginScreen() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [signingIn, setSigningIn] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const savedRole = await AsyncStorage.getItem('userRole');
+        if (savedRole) {
+          router.replace(`/${savedRole}` as any);
+        } else {
+          router.replace('/role-selection');
+        }
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const handleGoogleSignIn = async () => {
+    try {
+      setSigningIn(true);
+      
+      if (Platform.OS === 'web') {
+        // Web platform - use popup
+        await signInWithPopup(auth, googleProvider);
+      } else {
+        // Mobile platforms - show alert for now
+        Alert.alert(
+          'Mobile Sign In',
+          'Please use the web version to sign in with Google. Once signed in, your session will sync across devices.',
+          [{ text: 'OK' }]
+        );
+      }
+    } catch (error: any) {
+      console.error('Google Sign-in Error:', error);
+      Alert.alert('Sign In Failed', 'Could not sign in with Google. Please try again.');
+    } finally {
+      setSigningIn(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#8b5cf6" />
+        <Text style={styles.loadingText}>Loading...</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
-      <Image
-        source={require("../assets/images/app-image.png")}
-        style={styles.image}
-      />
+      <StatusBar style="light" />
+      
+      <View style={styles.content}>
+        <View style={styles.logoContainer}>
+          <View style={styles.logoCircle}>
+            <Ionicons name="fast-food" size={60} color="#8b5cf6" />
+          </View>
+          <Text style={styles.title}>Gravli</Text>
+          <Text style={styles.subtitle}>Campus Delivery</Text>
+        </View>
+
+        <View style={styles.welcomeSection}>
+          <Text style={styles.welcomeTitle}>Welcome to Gravli!</Text>
+          <Text style={styles.welcomeText}>
+            Your on-campus delivery solution. Fast, easy, and by students, for students.
+          </Text>
+        </View>
+
+        <TouchableOpacity
+          style={[styles.googleButton, signingIn && styles.buttonDisabled]}
+          onPress={handleGoogleSignIn}
+          disabled={signingIn}
+        >
+          {signingIn ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <>
+              <Ionicons name="logo-google" size={24} color="#fff" />
+              <Text style={styles.googleButtonText}>Sign in with Google</Text>
+            </>
+          )}
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>Made By Students</Text>
+        <Text style={styles.footerText}>Made For Students</Text>
+      </View>
     </View>
   );
 }
@@ -18,13 +119,92 @@ export default function Index() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#0c0c0c",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#0f172a',
   },
-  image: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "contain",
+  loadingContainer: {
+    flex: 1,
+    backgroundColor: '#0f172a',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    color: '#e2e8f0',
+    marginTop: 16,
+    fontSize: 16,
+  },
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 24,
+  },
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: 48,
+  },
+  logoCircle: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: '#1e293b',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  title: {
+    fontSize: 48,
+    fontWeight: '700',
+    color: '#fff',
+    marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#94a3b8',
+    letterSpacing: 2,
+  },
+  welcomeSection: {
+    marginBottom: 48,
+    alignItems: 'center',
+  },
+  welcomeTitle: {
+    fontSize: 24,
+    fontWeight: '600',
+    color: '#8b5cf6',
+    marginBottom: 12,
+  },
+  welcomeText: {
+    fontSize: 16,
+    color: '#cbd5e1',
+    textAlign: 'center',
+    lineHeight: 24,
+  },
+  googleButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#3b82f6',
+    paddingVertical: 16,
+    paddingHorizontal: 32,
+    borderRadius: 12,
+    width: '100%',
+    maxWidth: 400,
+    gap: 12,
+  },
+  buttonDisabled: {
+    opacity: 0.6,
+  },
+  googleButtonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  footer: {
+    paddingVertical: 24,
+    alignItems: 'center',
+  },
+  footerText: {
+    color: '#64748b',
+    fontSize: 14,
+    fontWeight: '600',
   },
 });
