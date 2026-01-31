@@ -56,10 +56,9 @@ def add_domains(access_token, domains):
             print(f"❌ Error: {response.status_code} - {response.text}")
 
 access_token = get_access_token()
+# Only add valid domain names (no ports)
 domains_to_add = [
     "app.emergent.sh",
-    "emergent.sh",
-    "emergentapp.dev",
-    "localhost:3000"
+    "emergent.sh"
 ]
 add_domains(access_token, domains_to_add)
