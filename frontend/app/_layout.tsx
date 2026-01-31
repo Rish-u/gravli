@@ -9,6 +9,7 @@ export default function RootLayout() {
         <Stack.Screen name="role-selection" />
         <Stack.Screen name="student" />
         <Stack.Screen name="deliverer" />
+        <Stack.Screen name="owner" />
       </Stack>
     </GestureHandlerRootView>
   );
