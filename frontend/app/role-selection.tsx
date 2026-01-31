@@ -228,6 +228,9 @@ const styles = StyleSheet.create({
   delivererButton: {
     backgroundColor: '#22c55e',
   },
+  ownerButton: {
+    backgroundColor: '#f59e0b',
+  },
   roleButtonText: {
     color: '#fff',
     fontSize: 24,
@@ -236,5 +239,96 @@ const styles = StyleSheet.create({
   roleButtonSubtext: {
     color: '#e2e8f0',
     fontSize: 14,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.8)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: '#1e293b',
+    borderRadius: 24,
+    width: '90%',
+    maxWidth: 400,
+    overflow: 'hidden',
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#334155',
+  },
+  modalTitle: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: '#fff',
+  },
+  modalBody: {
+    padding: 24,
+    alignItems: 'center',
+  },
+  ownerIconContainer: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: '#0f172a',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  modalSubtitle: {
+    fontSize: 14,
+    color: '#94a3b8',
+    textAlign: 'center',
+    marginBottom: 24,
+    lineHeight: 20,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#0f172a',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#334155',
+    paddingHorizontal: 16,
+    width: '100%',
+    marginBottom: 16,
+  },
+  inputIcon: {
+    marginRight: 12,
+  },
+  input: {
+    flex: 1,
+    color: '#fff',
+    fontSize: 16,
+    paddingVertical: 16,
+  },
+  loginButton: {
+    flexDirection: 'row',
+    backgroundColor: '#f59e0b',
+    paddingVertical: 16,
+    paddingHorizontal: 24,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    width: '100%',
+  },
+  buttonDisabled: {
+    opacity: 0.6,
+  },
+  loginButtonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '700',
+  },
+  helpText: {
+    fontSize: 12,
+    color: '#64748b',
+    textAlign: 'center',
+    marginTop: 16,
   },
 });
