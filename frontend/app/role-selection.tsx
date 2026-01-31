@@ -22,12 +22,8 @@ export default function RoleSelectionScreen() {
   const loadUserName = async () => {
     try {
       const isDemoMode = await AsyncStorage.getItem('isDemoMode');
-      if (isDemoMode === 'true') {
-        const demoUserStr = await AsyncStorage.getItem('demoUser');
-        if (demoUserStr) {
-          const demoUser = JSON.parse(demoUserStr);
-          setUserName(demoUser.displayName || 'Demo User');
-        }
+      if (isDemoMode === 'true' && auth.currentUser) {
+        setUserName(auth.currentUser.displayName || 'Demo User');
       } else if (auth.currentUser) {
         setUserName(auth.currentUser.displayName || 'User');
       }
