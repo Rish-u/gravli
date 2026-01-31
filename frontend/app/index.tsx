@@ -152,23 +152,24 @@ export default function LoginScreen() {
     try {
       setSigningIn(true);
       
-      // Create a demo user session without Firebase
-      const demoUser = {
-        uid: `demo_${Date.now()}`,
-        displayName: name || 'Demo User',
-        email: email || `demo${Date.now()}@gravli.demo`,
-        photoURL: null,
-      };
+      // Sign in anonymously to Firebase - this works without any configuration
+      const { signInAnonymously } = await import('firebase/auth');
+      const userCredential = await signInAnonymously(auth);
       
-      // Store demo user in AsyncStorage
-      await AsyncStorage.setItem('demoUser', JSON.stringify(demoUser));
+      // Update the anonymous user's display name
+      const displayName = name || 'Demo User';
+      await updateProfile(userCredential.user, {
+        displayName: displayName,
+      });
+      
+      // Mark as demo mode
       await AsyncStorage.setItem('isDemoMode', 'true');
       
       // Navigate to role selection
       router.replace('/role-selection');
     } catch (error) {
       console.error('Demo Mode Error:', error);
-      Alert.alert('Error', 'Failed to start demo mode.');
+      Alert.alert('Error', 'Failed to start demo mode. Please try again.');
     } finally {
       setSigningIn(false);
     }
