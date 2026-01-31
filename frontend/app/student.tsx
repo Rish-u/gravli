@@ -29,7 +29,7 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { CAFE_DATA, BLOCKS, DELIVERY_FEE } from '../constants/cafeData';
+import { CAFE_DATA, BLOCKS, DELIVERY_FEE, PICKUP_FEE, generateOrderPin } from '../constants/cafeData';
 import { CartItem, DeliveryRequest } from '../types';
 import { formatTimeAgo, formatSubStatus, getStatusColor } from '../utils/helpers';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
