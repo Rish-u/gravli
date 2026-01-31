@@ -16,7 +16,9 @@ import { StatusBar } from 'expo-status-bar';
 import { auth, googleProvider } from '../config/firebase';
 import { 
   onAuthStateChanged, 
-  signInWithPopup, 
+  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   updateProfile,
