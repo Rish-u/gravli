@@ -203,7 +203,8 @@ export default function StudentScreen() {
   };
 
   const submitOrder = async () => {
-    if (!selectedBlock || roomNumber.trim().length !== 3) {
+    // For delivery, require block and room number
+    if (orderType === 'delivery' && (!selectedBlock || roomNumber.trim().length !== 3)) {
       Alert.alert('Invalid Input', 'Please select a block and enter a 3-digit room number.');
       return;
     }
@@ -211,6 +212,9 @@ export default function StudentScreen() {
     setSubmitting(true);
 
     const firstItem = Object.values(cart)[0];
+    const currentFee = orderType === 'delivery' ? DELIVERY_FEE : PICKUP_FEE;
+    const orderPin = generateOrderPin();
+    
     const request = {
       items: Object.values(cart).map((item) => ({
         name: item.name,
@@ -219,9 +223,11 @@ export default function StudentScreen() {
       })),
       itemPrice: cartTotal,
       pickupLocation: firstItem.cafeName,
-      dropoffLocation: `${selectedBlock} - Room ${roomNumber}`,
-      deliveryFee: DELIVERY_FEE,
-      totalAmount: cartTotal + DELIVERY_FEE,
+      dropoffLocation: orderType === 'delivery' 
+        ? `${selectedBlock} - Room ${roomNumber}` 
+        : 'Self Pickup',
+      deliveryFee: currentFee,
+      totalAmount: cartTotal + currentFee,
       status: 'open',
       requesterId: user!.uid,
       requesterName: user!.displayName || 'Anonymous',
@@ -232,6 +238,9 @@ export default function StudentScreen() {
       createdAt: serverTimestamp(),
       subStatus: null,
       estimatedTime: null,
+      orderType: orderType,
+      pin: orderPin,
+      ownerStatus: null,
     };
 
     try {
@@ -239,8 +248,12 @@ export default function StudentScreen() {
       setCart({});
       setSelectedBlock('');
       setRoomNumber('');
+      setOrderType('delivery');
       setCheckoutModalVisible(false);
-      Alert.alert('Success', 'Your order has been placed!');
+      Alert.alert(
+        'Order Placed!', 
+        `Your order PIN is: ${orderPin}\n\nShow this PIN when collecting your order.`
+      );
     } catch (error) {
       console.error('Error placing order:', error);
       Alert.alert('Error', 'Failed to place order. Please try again.');
