@@ -4,16 +4,27 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  Modal,
+  TextInput,
+  Alert,
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import { auth } from '../config/firebase';
+import { OWNER_IDS } from '../constants/cafeData';
+import { UserRole } from '../types';
 
 export default function RoleSelectionScreen() {
   const router = useRouter();
   const [userName, setUserName] = useState('User');
+  const [ownerModalVisible, setOwnerModalVisible] = useState(false);
+  const [ownerId, setOwnerId] = useState('');
+  const [verifying, setVerifying] = useState(false);
 
   useEffect(() => {
     loadUserName();
@@ -32,9 +43,37 @@ export default function RoleSelectionScreen() {
     }
   };
 
-  const selectRole = async (role: 'student' | 'deliverer') => {
+  const selectRole = async (role: UserRole) => {
     await AsyncStorage.setItem('userRole', role);
     router.replace(`/${role}` as any);
+  };
+
+  const handleOwnerLogin = async () => {
+    if (!ownerId.trim()) {
+      Alert.alert('Missing ID', 'Please enter your Owner ID.');
+      return;
+    }
+
+    setVerifying(true);
+
+    // Simulate verification delay
+    setTimeout(async () => {
+      const upperOwnerId = ownerId.trim().toUpperCase();
+      
+      if (OWNER_IDS[upperOwnerId]) {
+        await AsyncStorage.setItem('ownerId', upperOwnerId);
+        await AsyncStorage.setItem('userRole', 'owner');
+        setOwnerModalVisible(false);
+        router.replace('/owner');
+      } else {
+        Alert.alert(
+          'Invalid Owner ID',
+          'The Owner ID you entered is not recognized. Please check and try again.',
+          [{ text: 'OK' }]
+        );
+      }
+      setVerifying(false);
+    }, 500);
   };
 
   return (
@@ -64,8 +103,81 @@ export default function RoleSelectionScreen() {
             <Text style={styles.roleButtonText}>Deliver Orders</Text>
             <Text style={styles.roleButtonSubtext}>Accept and fulfill deliveries</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.roleButton, styles.ownerButton]}
+            onPress={() => setOwnerModalVisible(true)}
+          >
+            <Ionicons name="storefront" size={40} color="#fff" />
+            <Text style={styles.roleButtonText}>Cafe Owner</Text>
+            <Text style={styles.roleButtonSubtext}>Manage your cafe orders</Text>
+          </TouchableOpacity>
         </View>
       </View>
+
+      {/* Owner Login Modal */}
+      <Modal
+        visible={ownerModalVisible}
+        animationType="slide"
+        transparent
+        onRequestClose={() => setOwnerModalVisible(false)}
+      >
+        <KeyboardAvoidingView
+          style={styles.modalOverlay}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        >
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Cafe Owner Login</Text>
+              <TouchableOpacity onPress={() => setOwnerModalVisible(false)}>
+                <Ionicons name="close" size={28} color="#fff" />
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.modalBody}>
+              <View style={styles.ownerIconContainer}>
+                <Ionicons name="storefront" size={60} color="#f59e0b" />
+              </View>
+              
+              <Text style={styles.modalSubtitle}>
+                Enter your unique Owner ID to access your cafe management dashboard.
+              </Text>
+
+              <View style={styles.inputContainer}>
+                <Ionicons name="key-outline" size={20} color="#94a3b8" style={styles.inputIcon} />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Owner ID (e.g., OWNER001)"
+                  placeholderTextColor="#94a3b8"
+                  value={ownerId}
+                  onChangeText={setOwnerId}
+                  autoCapitalize="characters"
+                  autoCorrect={false}
+                />
+              </View>
+
+              <TouchableOpacity
+                style={[styles.loginButton, verifying && styles.buttonDisabled]}
+                onPress={handleOwnerLogin}
+                disabled={verifying}
+              >
+                {verifying ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <>
+                    <Ionicons name="log-in" size={20} color="#fff" />
+                    <Text style={styles.loginButtonText}>Login as Owner</Text>
+                  </>
+                )}
+              </TouchableOpacity>
+
+              <Text style={styles.helpText}>
+                Don't have an Owner ID? Contact campus administration.
+              </Text>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
     </View>
   );
 }
