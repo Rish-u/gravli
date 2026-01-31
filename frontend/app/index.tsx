@@ -5,14 +5,22 @@ import {
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
-  Image,
   Alert,
   Platform,
+  TextInput,
+  KeyboardAvoidingView,
+  ScrollView,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { auth, googleProvider } from '../config/firebase';
-import { onAuthStateChanged, signInWithPopup, signInWithCredential, GoogleAuthProvider } from 'firebase/auth';
+import { 
+  onAuthStateChanged, 
+  signInWithPopup, 
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from 'firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser';
@@ -23,6 +31,11 @@ export default function LoginScreen() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [signingIn, setSigningIn] = useState(false);
+  const [showEmailLogin, setShowEmailLogin] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -45,10 +58,8 @@ export default function LoginScreen() {
       setSigningIn(true);
       
       if (Platform.OS === 'web') {
-        // Web platform - use popup
         await signInWithPopup(auth, googleProvider);
       } else {
-        // Mobile platforms - show alert for now
         Alert.alert(
           'Mobile Sign In',
           'Please use the web version to sign in with Google. Once signed in, your session will sync across devices.',
@@ -57,7 +68,68 @@ export default function LoginScreen() {
       }
     } catch (error: any) {
       console.error('Google Sign-in Error:', error);
-      Alert.alert('Sign In Failed', 'Could not sign in with Google. Please try again.');
+      
+      // Show more helpful error message
+      if (error.code === 'auth/unauthorized-domain') {
+        Alert.alert(
+          'Domain Not Authorized',
+          'This preview domain needs to be added to Firebase authorized domains. Please use Email Login instead.',
+          [
+            { text: 'Cancel', style: 'cancel' },
+            { text: 'Use Email Login', onPress: () => setShowEmailLogin(true) }
+          ]
+        );
+      } else {
+        Alert.alert('Sign In Failed', `Error: ${error.message}`);
+      }
+    } finally {
+      setSigningIn(false);
+    }
+  };
+
+  const handleEmailAuth = async () => {
+    if (!email || !password) {
+      Alert.alert('Missing Information', 'Please enter email and password.');
+      return;
+    }
+
+    if (isSignUp && !name) {
+      Alert.alert('Missing Information', 'Please enter your name.');
+      return;
+    }
+
+    try {
+      setSigningIn(true);
+
+      if (isSignUp) {
+        // Create new account
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        // Update profile with name
+        await updateProfile(userCredential.user, {
+          displayName: name,
+        });
+        Alert.alert('Success', 'Account created successfully!');
+      } else {
+        // Sign in existing user
+        await signInWithEmailAndPassword(auth, email, password);
+      }
+    } catch (error: any) {
+      console.error('Email Auth Error:', error);
+      
+      let errorMessage = 'Authentication failed. Please try again.';
+      if (error.code === 'auth/user-not-found') {
+        errorMessage = 'No account found with this email. Please sign up first.';
+      } else if (error.code === 'auth/wrong-password') {
+        errorMessage = 'Incorrect password. Please try again.';
+      } else if (error.code === 'auth/email-already-in-use') {
+        errorMessage = 'This email is already registered. Please sign in instead.';
+      } else if (error.code === 'auth/weak-password') {
+        errorMessage = 'Password should be at least 6 characters.';
+      } else if (error.code === 'auth/invalid-email') {
+        errorMessage = 'Invalid email address.';
+      }
+      
+      Alert.alert('Error', errorMessage);
     } finally {
       setSigningIn(false);
     }
