@@ -41,6 +41,19 @@ export default function LoginScreen() {
   const [showDemoMode, setShowDemoMode] = useState(false);
 
   useEffect(() => {
+    // Check for Google redirect result
+    if (Platform.OS === 'web') {
+      getRedirectResult(auth)
+        .then((result) => {
+          if (result?.user) {
+            console.log('Redirect sign-in successful!');
+          }
+        })
+        .catch((error) => {
+          console.log('Redirect result error:', error);
+        });
+    }
+
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         const savedRole = await AsyncStorage.getItem('userRole');
