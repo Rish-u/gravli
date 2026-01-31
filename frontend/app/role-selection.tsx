@@ -85,6 +85,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 24,
   },
+  greeting: {
+    fontSize: 18,
+    color: '#94a3b8',
+    marginBottom: 8,
+  },
   title: {
     fontSize: 28,
     fontWeight: '700',
