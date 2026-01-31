@@ -128,9 +128,47 @@ export default function LoginScreen() {
         errorMessage = 'Password should be at least 6 characters.';
       } else if (error.code === 'auth/invalid-email') {
         errorMessage = 'Invalid email address.';
+      } else if (error.code === 'auth/operation-not-allowed') {
+        errorMessage = 'Email authentication not enabled. Please use Demo Mode instead.';
+        // Show option to use demo mode
+        Alert.alert(
+          'Authentication Not Configured',
+          'Email authentication needs to be enabled in Firebase. Would you like to try Demo Mode instead?',
+          [
+            { text: 'Cancel', style: 'cancel' },
+            { text: 'Use Demo Mode', onPress: () => handleDemoMode() }
+          ]
+        );
+        return;
       }
       
       Alert.alert('Error', errorMessage);
+    } finally {
+      setSigningIn(false);
+    }
+  };
+
+  const handleDemoMode = async () => {
+    try {
+      setSigningIn(true);
+      
+      // Create a demo user session without Firebase
+      const demoUser = {
+        uid: `demo_${Date.now()}`,
+        displayName: name || 'Demo User',
+        email: email || `demo${Date.now()}@gravli.demo`,
+        photoURL: null,
+      };
+      
+      // Store demo user in AsyncStorage
+      await AsyncStorage.setItem('demoUser', JSON.stringify(demoUser));
+      await AsyncStorage.setItem('isDemoMode', 'true');
+      
+      // Navigate to role selection
+      router.replace('/role-selection');
+    } catch (error) {
+      console.error('Demo Mode Error:', error);
+      Alert.alert('Error', 'Failed to start demo mode.');
     } finally {
       setSigningIn(false);
     }
