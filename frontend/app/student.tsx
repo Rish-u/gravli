@@ -1264,4 +1264,95 @@ const styles = StyleSheet.create({
   historyList: {
     padding: 16,
   },
+  // New styles for updated UI
+  stationeryBox: {
+    borderColor: '#f59e0b',
+    borderWidth: 2,
+  },
+  stationeryImage: {
+    backgroundColor: '#1a1a2e',
+  },
+  cafeTag: {
+    fontSize: 10,
+    color: '#f59e0b',
+    textAlign: 'center',
+    paddingBottom: 8,
+    fontWeight: '600',
+  },
+  orderTypeContainer: {
+    flexDirection: 'row',
+    gap: 12,
+    marginBottom: 20,
+  },
+  orderTypeOption: {
+    flex: 1,
+    backgroundColor: '#0f172a',
+    padding: 16,
+    borderRadius: 12,
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#334155',
+    gap: 8,
+  },
+  orderTypeSelected: {
+    backgroundColor: '#6366f1',
+    borderColor: '#6366f1',
+  },
+  orderTypeSelectedPickup: {
+    backgroundColor: '#22c55e',
+    borderColor: '#22c55e',
+  },
+  orderTypeText: {
+    color: '#94a3b8',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  orderTypeTextSelected: {
+    color: '#fff',
+  },
+  orderTypeFee: {
+    color: '#64748b',
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  orderTypeFeeSelected: {
+    color: '#e2e8f0',
+  },
+  pickupInfo: {
+    flexDirection: 'row',
+    backgroundColor: '#064e3b',
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 20,
+    alignItems: 'center',
+    gap: 12,
+  },
+  pickupInfoText: {
+    flex: 1,
+    color: '#a7f3d0',
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  totalRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  totalSubLabel: {
+    color: '#94a3b8',
+    fontSize: 14,
+  },
+  totalSubValue: {
+    color: '#e2e8f0',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  freeText: {
+    color: '#22c55e',
+  },
+  totalDivider: {
+    height: 1,
+    backgroundColor: '#334155',
+    marginVertical: 12,
+  },
 });
